@@ -24,7 +24,7 @@ local function test (x, xhc)
 end
 
 
-local xxhash = require "lib.xxhash"
+local xxhash = require "lib.resty.xxhash"
 
 print("version number:", xxhash.version())
 

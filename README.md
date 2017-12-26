@@ -6,13 +6,13 @@ Installation
 To install `luajit-xxHash` you need to install
 [xxHash](https://github.com/Cyan4973/xxHash)
 with shared libraries firtst.
-Then you can install `luajit-xxHash` by placing `lib/xxhash.lua` to
+Then you can install `luajit-xxHash` by placing `lib/resty/xxhash.lua` to
 your lua library path.
 
 Usage
 =====
 ```lua
-local xxhash = require "xxhash"
+local xxhash = require "resty.xxhash"
 
 local f = assert(io.open(filename, r))
 local t = f:read("*all")
