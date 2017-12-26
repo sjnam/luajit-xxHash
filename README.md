@@ -12,40 +12,32 @@ your lua library path.
 Usage
 =====
 ```lua
-local function test (x, xhc)
-   xhc:update('abc');
-   local y = xhc:digest()
-   print(y)
+local xxhash = require "xxhash"
 
-   assert(x == y)
-   
-   xhc:reset()
+local f = assert(io.open(filename, r))
+local t = f:read("*all")
+local x = xxhash.xxh64(t)
+print(x)
 
-   xhc:update('a')
-   xhc:update('b')
-   xhc:update('c')
-   local z = xhc:digest()
-   print(z)
+-- goto start position of the file
+f:seek("set", 0)
 
-   assert(x == z)
+local xxh = xxhash.new(64)
 
-   print("canonical:", xhc:canonicalFromHash())
-
-   assert(x == xhc:hashFromCanonical())
-
-   xhc:free()
+while true do
+   local lines, rest = f:read(1024, "*line")
+   if not lines then break end
+   if rest then lines = lines .. rest .. "\n" end
+   xxh:update(lines)
 end
+local y = xxh:digest()
+print(y)
+print("canonical form: ", xxh:canonicalFromHash())
 
+-- check
+assert(x == y)
 
-local xxhash = require "lib.xxhash"
+xxh:free()
 
-print("version number:", xxhash.version())
-
--- 32-bit
-print("32-bit")
-test(xxhash.xxh32('abc'), xxhash.new(32))
-
--- 64-bit
-print("\n64-bit")
-test(xxhash.xxh64('abc'), xxhash.new(64))
+f:close()
 ```
