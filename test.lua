@@ -1,10 +1,8 @@
 
-local xxhash = require "xxhash32"
-
 -- 32-bit
 print("32-bit")
 
-local xxhash = require "xxhash32"
+local xxhash = require "lib.xxhash32"
 
 print(xxhash.version())
 print(xxhash.xxh('abc', 0x5bd1e995))
@@ -26,11 +24,10 @@ print(tostring(xh:hashFromCanonical()))
 
 xh:free()
 
-
 -- 64-bit
 print("\n64-bit")
 
-xxhash = require "xxhash64"
+xxhash = require "lib.xxhash64"
 
 print(xxhash.version())
 print(xxhash.xxh('abc', 0x5bd1e995))
