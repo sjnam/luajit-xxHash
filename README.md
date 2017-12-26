@@ -34,7 +34,7 @@ local function test (xxhash)
 
    assert(x == z)
 
-   print(xh:canonicalFromHash())
+   print("canonical:", xh:canonicalFromHash())
 
    assert(x == xh:hashFromCanonical())
 
