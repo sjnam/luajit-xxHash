@@ -1,5 +1,13 @@
 # luajit-xxHash
-luajit version for xxHash
+luajit version for [xxHash](http://cyan4973.github.io/xxHash/)
+
+Installation
+============
+To install `luajit-xxHash` you need to install
+[xxHash](https://github.com/Cyan4973/xxHash)
+with shared libraries firtst.
+Then you can install `luajit-xxHash` by placing `xxhash{32,64}.lua` to
+your lua library path.
 
 Usage
 =====
