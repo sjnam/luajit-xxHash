@@ -12,56 +12,41 @@ your lua library path.
 Usage
 =====
 ```lua
+local function test (xxhash)
+   print("version number:", xxhash.version())
+
+   local x = xxhash.xxh('abc')
+   print(x)
+
+   local xh = xxhash.new()
+   xh:update('abc');
+   local y = xh:digest()
+   print(y)
+
+   assert(x == y)
+
+   xh:reset()
+
+   xh:update('a')
+   xh:update('bc')
+   local z = xh:digest()
+   print(z)
+
+   assert(y == z)
+
+   print(xh:canonicalFromHash())
+
+   assert(x == tostring(xh:hashFromCanonical()))
+
+   xh:free()
+end
+
 
 -- 32-bit
 print("32-bit")
-
-local xxhash = require "lib.xxhash32"
-
-print(xxhash.version())
-print(xxhash.xxh('abc', 0x5bd1e995))
-
-local xh = xxhash.new(0x5bd1e995)
-xh:update('abc');
-local res = xh:digest()
-print(res)
-
-xh:reset()
-
-xh:update('a')
-xh:update('bc')
-res = xh:digest()
-print(res)
-
-print(xh:canonicalFromHash())
-print(tostring(xh:hashFromCanonical()))
-
-xh:free()
-
+test(require"lib.xxhash32")
 
 -- 64-bit
 print("\n64-bit")
-
-xxhash = require "lib.xxhash64"
-
-print(xxhash.version())
-print(xxhash.xxh('abc', 0x5bd1e995))
-
-local xh = xxhash.new(0x5bd1e995)
-xh:update('abc');
-local res = xh:digest()
-print(res)
-
-xh:reset()
-
-xh:update('a')
-xh:update('bc')
-res = xh:digest()
-print(res)
-
-print(xh:canonicalFromHash())
-print(tostring(xh:hashFromCanonical()))
-
-xh:free()
-
+test(require"lib.xxhash64")
 ```
