@@ -1,9 +1,3 @@
-# luajit-xxHash
-luajit version for xxHash
-
-Usage
-=====
-```lua
 
 local xxhash = require "xxhash32"
 
@@ -55,5 +49,3 @@ print(xh:canonicalFromHash())
 print(tostring(xh:hashFromCanonical()))
 
 xh:free()
-
-```
