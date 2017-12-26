@@ -1,42 +1,37 @@
 
-local function test (xxhash)
-   print("version number:", xxhash.version())
-
-   local x = xxhash.xxh('abc')
-   print(x)
-
-   local xh = xxhash.new()
-   xh:update('abc');
-   local y = xh:digest()
+local function test (x, xhc)
+   xhc:update('abc');
+   local y = xhc:digest()
    print(y)
 
    assert(x == y)
+   
+   xhc:reset()
 
-   xh:reset()
-
-   xh:update('a')
-   xh:update('bc')
-   local z = xh:digest()
+   xhc:update('a')
+   xhc:update('b')
+   xhc:update('c')
+   local z = xhc:digest()
    print(z)
 
    assert(x == z)
 
-   print("canonical:", xh:canonicalFromHash())
+   print("canonical:", xhc:canonicalFromHash())
 
-   assert(x == xh:hashFromCanonical())
+   assert(x == xhc:hashFromCanonical())
 
-   xh:free()
+   xhc:free()
 end
 
 
-local xxhash
+local xxhash = require "lib.xxhash"
+
+print("version number:", xxhash.version())
 
 -- 32-bit
 print("32-bit")
-xxhash = require "lib.xxhash32"
-test(xxhash)
+test(xxhash.xxh32('abc'), xxhash.new(32))
 
 -- 64-bit
 print("\n64-bit")
-xxhash = require "lib.xxhash64"
-test(xxhash)
+test(xxhash.xxh64('abc'), xxhash.new(64))
