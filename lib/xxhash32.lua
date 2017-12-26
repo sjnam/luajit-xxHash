@@ -56,7 +56,7 @@ local canonical_t = ffi_typeof("XXH32_canonical_t[1]")
 
 
 function _M.version (self)
-   return tostring(xxhash.XXH_versionNumber())
+   return xxhash.XXH_versionNumber()
 end
 
 
@@ -98,9 +98,8 @@ end
 
 
 function _M.canonicalFromHash (self, hash)
-   local hash = hash or self._hash
    local dst = ffi_new(canonical_t)
-   xxhash.XXH32_canonicalFromHash(dst, hash)
+   xxhash.XXH32_canonicalFromHash(dst, hash or self._hash)
    local str = {}
    local digest = dst[0].digest
    for i=0,3 do
@@ -113,8 +112,7 @@ end
 
 
 function _M.hashFromCanonical (self, src)
-   local src = src or self._dst
-   return xxhash.XXH32_hashFromCanonical(src)
+   return tostring(xxhash.XXH32_hashFromCanonical(src or self._dst))
 end
 
 

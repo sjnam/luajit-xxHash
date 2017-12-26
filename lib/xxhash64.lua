@@ -1,15 +1,18 @@
 
 local ffi = require "ffi"
 
+local C = ffi.C
+local ffi_str = ffi.string
 local ffi_new = ffi.new
 local ffi_typeof = ffi.typeof
-local tostring = tostring
 local tconcat = table.concat
 local sformat = string.format
 local setmetatable = setmetatable
 
 
 ffi.cdef[[
+int sprintf(char *str, const char *format, ...);
+
 unsigned XXH_versionNumber (void);
 
 /* 64-bit hash */
@@ -55,19 +58,25 @@ local canonical_t = ffi_typeof("XXH64_canonical_t[1]")
 
 
 function _M.version (self)
-   return tostring(xxhash.XXH_versionNumber())
+   return xxhash.XXH_versionNumber()
 end
 
 
 -- 64-bit hash
 
+local function _ull (n)
+   local tmp = ffi.new("char[64]")
+   C.sprintf(tmp, "%llu", n)
+   return ffi_str(tmp)
+end
+
 function _M.xxh (input, seed)
-   return tostring(xxhash.XXH64(input, #input, seed or 0))
+   return _ull(xxhash.XXH64(input, #input, seed or 0))
 end
 
 
 local function reset (self)
-   return xxhash.XXH64_reset(self._state, self.seed)
+   return _ull(xxhash.XXH64_reset(self._state, self.seed))
 end
 
 _M.reset = reset
@@ -91,14 +100,13 @@ end
 
 function _M.digest (self)
    self._hash = xxhash.XXH64_digest(self._state)
-   return tostring(self._hash)
+   return _ull(self._hash)
 end
 
 
 function _M.canonicalFromHash (self, hash)
-   local hash = hash or self._hash
    local dst = ffi_new(canonical_t)
-   xxhash.XXH64_canonicalFromHash(dst, hash)
+   xxhash.XXH64_canonicalFromHash(dst, hash or self._hash)
    local str = {}
    local digest = dst[0].digest
    for i=0,7 do
@@ -111,8 +119,7 @@ end
 
 
 function _M.hashFromCanonical (self, src)
-   local src = src or self._dst
-   return xxhash.XXH64_hashFromCanonical(src)
+   return _ull(xxhash.XXH64_hashFromCanonical(src or self._dst))
 end
 
 

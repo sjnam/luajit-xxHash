@@ -19,20 +19,24 @@ local function test (xxhash)
    local z = xh:digest()
    print(z)
 
-   assert(y == z)
+   assert(x == z)
 
    print(xh:canonicalFromHash())
 
-   assert(x == tostring(xh:hashFromCanonical()))
+   assert(x == xh:hashFromCanonical())
 
    xh:free()
 end
 
 
+local xxhash
+
 -- 32-bit
 print("32-bit")
-test(require"lib.xxhash32")
+xxhash = require "lib.xxhash32"
+test(xxhash)
 
 -- 64-bit
 print("\n64-bit")
-test(require"lib.xxhash64")
+xxhash = require "lib.xxhash64"
+test(xxhash)
