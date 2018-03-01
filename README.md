@@ -9,8 +9,8 @@ with shared libraries firtst.
 Then you can install `luajit-xxHash` by placing `lib/resty/xxhash.lua` to
 your lua library path.
 
-Usage
-=====
+Synopsis
+========
 ```lua
 local xxhash = require "resty.xxhash"
 
@@ -41,3 +41,40 @@ xxh:free()
 
 f:close()
 ```
+
+Methods
+=======
+
+xx32
+----
+`syntax: xxhash.xx32(input, seed?)`
+
+xx64
+----
+`syntax: xxhash.xx32(input, seed?)`
+
+new
+---
+`syntax: xxh, err = xxhash.new(bits, seed?)`
+
+Creates a xxhash object. 
+
+update
+------
+`syntax: xxh:update(input)`
+
+digest
+------
+`syntax: s = xxh:digest()`
+
+canonicalFromHash
+-----------------
+`syntax: xxh:canonicalFromHash()`
+
+The canonical representation uses human-readable write convention,
+aka big-endian (large digits first).
+
+free
+----
+`syntax: xxh:free()`
+
