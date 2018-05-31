@@ -216,7 +216,7 @@ end
 -- xxhash
 
 local _M = {
-   _VERSION = '0.1.0',
+   _VERSION = '0.1.5',
    [32] = _xxhash32,
    [64] = _xxhash64,
 }
