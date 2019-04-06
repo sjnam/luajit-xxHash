@@ -12,7 +12,7 @@ your lua library path.
 Synopsis
 ========
 ```lua
-local xxhash = require "resty.xxhash"
+local xxhash = require "xxhash"
 
 local f = assert(io.open(filename, r))
 local t = f:read("*all")
@@ -78,3 +78,10 @@ free
 ----
 `syntax: xxh:free()`
 
+Author
+======
+Soojin Nam jsunam@gmail.com
+
+License
+=======
+Public Domain
