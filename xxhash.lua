@@ -159,7 +159,7 @@ end
 
 
 local function reset (self)
-   return _ull(xxhash.XXH64_reset(self._state, self.seed))
+   return xxhash.XXH64_reset(self._state, self.seed)
 end
 
 _xxhash64.reset = reset
