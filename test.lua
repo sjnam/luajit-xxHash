@@ -1,3 +1,5 @@
+local xxhash = require "xxhash"
+
 
 local function test (x, xhc)
    xhc:update('abc');
@@ -23,8 +25,6 @@ local function test (x, xhc)
    xhc:free()
 end
 
-
-local xxhash = require "xxhash"
 
 print("version number:", xxhash.version())
 

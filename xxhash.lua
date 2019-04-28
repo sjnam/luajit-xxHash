@@ -10,7 +10,6 @@ local ffi_str = ffi.string
 local ffi_new = ffi.new
 local ffi_typeof = ffi.typeof
 local tostring = tostring
-local tconcat = table.concat
 local sformat = string.format
 local setmetatable = setmetatable
 
@@ -101,7 +100,7 @@ end
 _xxhash32.reset = reset
 
 
-function _xxhash32.new (self, seed)
+function _xxhash32:new (seed)
    local obj = {
       seed = seed or 0,
       _state = xxhash.XXH32_createState(),
@@ -113,37 +112,33 @@ function _xxhash32.new (self, seed)
 end
 
 
-function _xxhash32.update (self, input)
+function _xxhash32:update (input)
    return xxhash.XXH32_update(self._state, input, #input)
 end
 
 
-function _xxhash32.digest (self)
+function _xxhash32:digest ()
    self._hash = xxhash.XXH32_digest(self._state)
    return tostring(self._hash)
 end
 
 
-function _xxhash32.canonicalFromHash (self, hash)
+function _xxhash32:canonicalFromHash (hash)
    local dst = ffi_new(canonical32_t)
    xxhash.XXH32_canonicalFromHash(dst, hash or self._hash)
-   local str = {}
-   local digest = dst[0].digest
-   for i=0,3 do
-      str[#str+1] = sformat("%02x", digest[i]) 
-   end
    self._dst = dst
-   
-   return tconcat(str)
+   local digest = dst[0].digest
+   return sformat("%02x", digest[0])..sformat("%02x", digest[1])
+      ..sformat("%02x", digest[2])..sformat("%02x", digest[3])
 end
 
 
-function _xxhash32.hashFromCanonical (self, src)
+function _xxhash32:hashFromCanonical (src)
    return tostring(xxhash.XXH32_hashFromCanonical(src or self._dst))
 end
 
 
-function _xxhash32.free (self)
+function _xxhash32:free ()
    xxhash.XXH32_freeState(self._state)
 end
 
@@ -170,7 +165,7 @@ end
 _xxhash64.reset = reset
 
 
-function _xxhash64.new (self, seed)
+function _xxhash64:new (seed)
    local obj = {
       seed = seed or 0,
       _state = xxhash.XXH64_createState(),
@@ -182,37 +177,35 @@ function _xxhash64.new (self, seed)
 end
 
 
-function _xxhash64.update (self, input)
+function _xxhash64:update (input)
    return xxhash.XXH64_update(self._state, input, #input)
 end
 
 
-function _xxhash64.digest (self)
+function _xxhash64:digest ()
    self._hash = xxhash.XXH64_digest(self._state)
    return _ull(self._hash)
 end
 
 
-function _xxhash64.canonicalFromHash (self, hash)
+function _xxhash64:canonicalFromHash (hash)
    local dst = ffi_new(canonical64_t)
    xxhash.XXH64_canonicalFromHash(dst, hash or self._hash)
-   local str = {}
-   local digest = dst[0].digest
-   for i=0,7 do
-      str[#str+1] = sformat("%02x", digest[i]) 
-   end
    self._dst = dst
-   
-   return tconcat(str)
+   local digest = dst[0].digest
+   return sformat("%02x", digest[0])..sformat("%02x", digest[1])
+      ..sformat("%02x", digest[2])..sformat("%02x", digest[3])
+      ..sformat("%02x", digest[4])..sformat("%02x", digest[5])
+      ..sformat("%02x", digest[6])..sformat("%02x", digest[7])
 end
 
 
-function _xxhash64.hashFromCanonical (self, src)
+function _xxhash64:hashFromCanonical (src)
    return _ull(xxhash.XXH64_hashFromCanonical(src or self._dst))
 end
 
 
-function _xxhash64.free (self)
+function _xxhash64:free ()
    xxhash.XXH64_freeState(self._state)
 end
 
